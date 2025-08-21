@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#025940" />
+  <title>IGetHouse – Property Puzzle</title>
+  <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="app-header" role="banner">
+    <img src="assets/logo.jpg" alt="IGetHouse logo" class="app-logo" />
+    <h1 class="app-title">IGetHouse – Property Puzzle</h1>
+    <p class="app-subtitle">Assemble the home. Beat your time. Explore listings.</p>
+  </header>
+
+  <main class="app-main" role="main">
+    <section class="controls" aria-label="Puzzle controls">
+      <div class="control-group" role="group" aria-label="Difficulty">
+        <span class="control-label">Difficulty:</span>
+        <button class="btn btn-diff" data-diff="easy" aria-label="Easy difficulty">Easy</button>
+        <button class="btn btn-diff" data-diff="medium" aria-label="Medium difficulty">Medium</button>
+        <button class="btn btn-diff" data-diff="hard" aria-label="Hard difficulty">Hard</button>
+      </div>
+      <div class="control-group nav" role="group" aria-label="Navigate puzzles">
+        <div class="nav-row">
+          <button id="btn-prev" class="btn" aria-label="Previous puzzle">Prev</button>
+          <button id="btn-next" class="btn" aria-label="Next puzzle">Next</button>
+        </div>
+        <span id="puzzle-title" class="property-title" aria-live="polite">Loading…</span>
+      </div>
+      <div class="control-group" role="group" aria-label="Actions">
+        <button id="btn-new" class="btn" aria-label="New puzzle">New Puzzle</button>
+        <button id="btn-shuffle" class="btn" aria-label="Shuffle pieces">Shuffle</button>
+        <button id="btn-preview" class="btn" aria-label="Toggle preview" aria-pressed="false">Show Preview</button>
+      </div>
+      <div class="status" aria-live="polite">
+        <span id="timer" class="timer" aria-label="Elapsed time">00:00</span>
+        <span id="best" class="best" aria-label="Best time">Best: --:--</span>
+        <span id="progress" class="progress" aria-label="Progress">0%</span>
+      </div>
+    </section>
+
+    <section class="board" aria-label="Puzzle board">
+      <div class="canvas-wrapper">
+        <canvas id="puzzle" class="puzzle-canvas" role="img" aria-label="Jigsaw puzzle board"></canvas>
+        <canvas id="confetti" class="confetti-canvas" aria-hidden="true"></canvas>
+        <img id="preview" class="preview" alt="Preview of the completed image" decoding="async" loading="lazy" aria-label="Puzzle preview" hidden />
+      </div>
+    </section>
+  </main>
+
+  <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-desc" hidden>
+    <div class="modal-card">
+      <h2 id="modal-title">Congratulations!</h2>
+      <p id="modal-desc">You completed the IGetHouse Dream Home Puzzle.</p>
+      <p class="cta">Want to see homes like this?</p>
+      <div class="modal-actions">
+        <a id="cta-link" class="btn btn-primary" href="#" target="_blank" rel="noopener" aria-label="View property listings">View Listings</a>
+        <button id="btn-share" class="btn" aria-label="Share your completion">Share</button>
+        <button id="btn-close" class="btn btn-ghost" aria-label="Close dialog">Close</button>
+      </div>
+      <div id="share-fallback" class="share-fallback" hidden>
+        <a class="share-link" id="share-x" href="#" target="_blank" rel="noopener" aria-label="Share on X">Share on X</a>
+        <a class="share-link" id="share-fb" href="#" target="_blank" rel="noopener" aria-label="Share on Facebook">Share on Facebook</a>
+        <a class="share-link" id="share-wa" href="#" target="_blank" rel="noopener" aria-label="Share on WhatsApp">Share on WhatsApp</a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="app-footer" role="contentinfo">
+    <span>© <span id="year"></span> IGetHouse</span>
+  </footer>
+
+  <script id="config-json" type="application/json">
+  {
+    "ctaUrl": "https://www.igethouse.ng/"
+  }
+  </script>
+  <script id="puzzles-json" type="application/json">
+  {
+    "puzzles": [
+      { "id": "modern-villa-01", "title": "Modern Villa", "imageUrl": "https://images.unsplash.com/photo-1502005229762-cf1b2da7c52f?q=70&w=1200&auto=format&fit=crop" },
+      { "id": "cozy-home-02", "title": "Cozy Family Home", "imageUrl": "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=70&w=1200&auto=format&fit=crop" },
+      { "id": "luxury-estate-03", "title": "Luxury Estate", "imageUrl": "https://images.unsplash.com/photo-1600585154526-990dced4db0d?q=70&w=1200&auto=format&fit=crop" },
+      { "id": "beach-house-04", "title": "Beach House", "imageUrl": "https://images.unsplash.com/photo-1494526585095-c41746248156?q=70&w=1200&auto=format&fit=crop" },
+      { "id": "mountain-cabin-05", "title": "Mountain Cabin", "imageUrl": "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?q=70&w=1200&auto=format&fit=crop" },
+      { "id": "urban-loft-06", "title": "Urban Loft", "imageUrl": "https://images.unsplash.com/photo-1523217582562-09d0def993a6?q=70&w=1200&auto=format&fit=crop" }
+    ]
+  }
+  </script>
+
+  <script src="app.js" defer></script>
+</body>
+</html> 
