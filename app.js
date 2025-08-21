@@ -67,7 +67,7 @@
 	// Exact completion tolerance (in pixels)
 	const EXACT_SNAP_TOLERANCE_PX = 2;
 	// Detection tolerance to allow tiny per-piece jitter before final snap
-	const DETECTION_TOLERANCE_PX = 6;
+	const DETECTION_TOLERANCE_PX = 10;
 	// Highlight (pre-snap visual feedback)
 	const PRE_SNAP_MULTIPLIER = 2;
 	let highlightedPieceIds = new Set();
@@ -264,6 +264,26 @@
 	const draw = () => {
 		if (!imageLoaded) return;
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		// Dashed grid overlay at piece boundaries
+		ctx.save();
+		ctx.strokeStyle = "rgba(2,89,64,0.15)";
+		ctx.lineWidth = 1;
+		ctx.setLineDash([6, 10]);
+		for (let c = 1; c < cols; c++) {
+			const x = Math.round(c * pieceWidth) + 0.5;
+			ctx.beginPath();
+			ctx.moveTo(x, 0);
+			ctx.lineTo(x, canvas.height);
+			ctx.stroke();
+		}
+		for (let r = 1; r < rows; r++) {
+			const y = Math.round(r * pieceHeight) + 0.5;
+			ctx.beginPath();
+			ctx.moveTo(0, y);
+			ctx.lineTo(canvas.width, y);
+			ctx.stroke();
+		}
+		ctx.restore();
 		for (const p of pieces) {
 			ctx.drawImage(
 				image,
