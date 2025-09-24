@@ -500,11 +500,13 @@
 		});
 		if (btnSimHard) btnSimHard.addEventListener("click", () => {
 			closePromo();
-			// Just show the modal directly
-			document.getElementById("modal-title").textContent = "Congratulations! Hard Mode Completed!";
-			document.getElementById("modal-desc").textContent = "You completed the IGetHouse Dream Home Puzzle on Hard difficulty!";
-			modal.hidden = false;
-			modal.focus();
+			// Update modal content
+			const modalTitle = document.getElementById("modal-title");
+			const modalDesc = document.getElementById("modal-desc");
+			modalTitle.textContent = "Congratulations! Hard Mode Completed!";
+			modalDesc.textContent = "You completed the IGetHouse Dream Home Puzzle on Hard difficulty!";
+			// Use the same openModal function that works for real wins
+			openModal();
 			confetti();
 		});
 	};
