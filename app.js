@@ -343,6 +343,17 @@
 		openModal();
 	};
 
+	// Wait until image is loaded and pieces are created
+	const waitForPuzzleReady = (timeoutMs = 5000) => new Promise((resolve) => {
+		const start = performance.now();
+		const tick = () => {
+			if (imageLoaded && pieces && pieces.length > 0) { resolve(); return; }
+			if (performance.now() - start > timeoutMs) { resolve(); return; }
+			requestAnimationFrame(tick);
+		};
+		tick();
+	});
+
 	// Confetti (simple)
 	const confetti = () => {
 		const particles = Array.from({ length: 140 }).map(() => ({
@@ -453,8 +464,16 @@
 			rAFTimer();
 		}
 		// Simulate win buttons
-		if (btnSimEasy) btnSimEasy.addEventListener("click", async () => { setDifficulty("easy"); await new Promise(r => setTimeout(r, 50)); forceWin({ updateBest: false }); });
-		if (btnSimHard) btnSimHard.addEventListener("click", async () => { setDifficulty("hard"); await new Promise(r => setTimeout(r, 50)); forceWin({ updateBest: false }); });
+		if (btnSimEasy) btnSimEasy.addEventListener("click", async () => {
+			setDifficulty("easy");
+			await waitForPuzzleReady();
+			forceWin({ updateBest: false });
+		});
+		if (btnSimHard) btnSimHard.addEventListener("click", async () => {
+			setDifficulty("hard");
+			await waitForPuzzleReady();
+			forceWin({ updateBest: false });
+		});
 	};
 
 	const onPointerMove = (e) => {
