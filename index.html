@@ -71,11 +71,22 @@
     <div class="modal-card">
       <h2 id="modal-title">Congratulations!</h2>
       <p id="modal-desc">You completed the IGetHouse Dream Home Puzzle.</p>
-      <p class="cta">Want to see homes like this?</p>
-      <div class="modal-actions">
-        <a id="cta-link" class="btn btn-primary" href="#" target="_blank" rel="noopener" aria-label="View property listings">View Listings</a>
-        <button id="btn-share" class="btn" aria-label="Share your completion">Share</button>
-        <button id="btn-close" class="btn btn-ghost" aria-label="Close dialog">Close</button>
+      <div id="prize-section" hidden>
+        <p class="prize-text">You've won: <strong id="prize-name"></strong></p>
+        <p class="cta">Claim your prize by chatting with our agent:</p>
+        <p class="agent-info" id="agent-info"></p>
+        <div class="modal-actions">
+          <a id="whatsapp-link" class="btn btn-primary" href="#" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">Claim Prize on WhatsApp</a>
+          <button id="btn-close" class="btn btn-ghost" aria-label="Close dialog">Close</button>
+        </div>
+      </div>
+      <div id="normal-section">
+        <p class="cta">Want to see homes like this?</p>
+        <div class="modal-actions">
+          <a id="cta-link" class="btn btn-primary" href="#" target="_blank" rel="noopener" aria-label="View property listings">View Listings</a>
+          <button id="btn-share" class="btn" aria-label="Share your completion">Share</button>
+          <button id="btn-close-normal" class="btn btn-ghost" aria-label="Close dialog">Close</button>
+        </div>
       </div>
       <div id="share-fallback" class="share-fallback" hidden>
         <a class="share-link" id="share-x" href="#" target="_blank" rel="noopener" aria-label="Share on X">Share on X</a>

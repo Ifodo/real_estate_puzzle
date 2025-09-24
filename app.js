@@ -401,6 +401,23 @@
 		step();
 	};
 
+	// Prizes for hard mode completion
+	const PRIZES = [
+		"Personalised Home Décor Moodboard",
+		"'My Dream Home' AI Blueprint Generator",
+		"Property Investment Starter Kit (Digital Pack + ₦50k Voucher)",
+		"1-on-1 Real Estate Coaching Session",
+		"Free Photoshoot of Your New Home purchased on our platform"
+	];
+
+	const AGENTS = [
+		{ name: "Bisola Salami", phone: "+234 916 522 6722" },
+		{ name: "Olayinka Okunola", phone: "+234 812 853 2038" }
+	];
+
+	const getRandomPrize = () => PRIZES[Math.floor(Math.random() * PRIZES.length)];
+	const getRandomAgent = () => AGENTS[Math.floor(Math.random() * AGENTS.length)];
+
 	// Modal & Share
 	const openModal = () => {
 		modal.hidden = false;
@@ -620,17 +637,34 @@
 				confetti();
 			});
 		}
-		if (btnSimHard) {
-			btnSimHard.addEventListener("click", () => {
-				closePromo();
-				const modalTitle = document.getElementById("modal-title");
-				const modalDesc = document.getElementById("modal-desc");
-				modalTitle.textContent = "Congratulations! Hard Mode Completed!";
-				modalDesc.textContent = "You completed the IGetHouse Dream Home Puzzle on Hard difficulty!";
-				openModal();
-				confetti();
-			});
-		}
+	if (btnSimHard) {
+		btnSimHard.addEventListener("click", () => {
+			closePromo();
+			const modalTitle = document.getElementById("modal-title");
+			const modalDesc = document.getElementById("modal-desc");
+			const prizeSection = document.getElementById("prize-section");
+			const normalSection = document.getElementById("normal-section");
+			const prizeName = document.getElementById("prize-name");
+			const agentInfo = document.getElementById("agent-info");
+			const whatsappLink = document.getElementById("whatsapp-link");
+			
+			modalTitle.textContent = "Congratulations! Hard Mode Completed!";
+			modalDesc.textContent = "You completed the IGetHouse Dream Home Puzzle on Hard difficulty!";
+			
+			// Show prize section for hard mode
+			const prize = getRandomPrize();
+			const agent = getRandomAgent();
+			prizeName.textContent = prize;
+			agentInfo.textContent = `${agent.name} - ${agent.phone}`;
+			whatsappLink.href = `https://wa.me/${agent.phone.replace(/[^0-9]/g, '')}?text=Hi! I just won "${prize}" on the IGetHouse Puzzle Game. I'd like to claim my prize!`;
+			
+			prizeSection.hidden = false;
+			normalSection.hidden = true;
+			
+			openModal();
+			confetti();
+		});
+	}
 	};
 
 	if (document.readyState === "loading") {
