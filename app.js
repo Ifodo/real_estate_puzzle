@@ -574,15 +574,8 @@
 				}
 			});
 		}
-		// Show the promo once per session
-		try {
-			if (!sessionStorage.getItem("promo:shown")) {
-				openPromo();
-				sessionStorage.setItem("promo:shown", "1");
-			}
-		} catch (_) {
-			openPromo();
-		}
+		// Always show the promo on page load
+		openPromo();
 		// Promo interactions
 		if (btnPromoHard) btnPromoHard.addEventListener("click", () => { closePromo(); setDifficulty("hard"); });
 		if (btnPromoStay) btnPromoStay.addEventListener("click", () => { closePromo(); });
