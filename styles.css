@@ -27,7 +27,7 @@ body {
 .app-logo { height: 40px; width: auto; vertical-align: middle; margin-bottom: 0.25rem; }
 .app-title { margin: 0; font-size: 1.5rem; font-weight: 700; color: var(--brand-700); }
 .app-subtitle { margin: 0.25rem 0 0; color: #475569; }
-.quick-win { margin-top: 0.5rem; display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; position: relative; z-index: 30; }
+.quick-win { display: flex; gap: 0.5rem; justify-content: flex-start; flex-wrap: wrap; }
 
 .app-main { max-width: 1100px; margin: 0 auto; padding: 1rem; }
 
