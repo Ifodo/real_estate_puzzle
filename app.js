@@ -474,12 +474,14 @@
 		}
 		// Simulate win buttons (instant, no waiting)
 		if (btnSimEasy) btnSimEasy.addEventListener("click", () => {
+			closePromo();
 			applyDifficultyLocally("easy");
 			computeCanvasSize();
 			createPieces();
 			forceWin({ updateBest: false });
 		});
 		if (btnSimHard) btnSimHard.addEventListener("click", () => {
+			closePromo();
 			applyDifficultyLocally("hard");
 			computeCanvasSize();
 			createPieces();
