@@ -354,6 +354,15 @@
 		tick();
 	});
 
+	// Apply difficulty instantly without reloading image/puzzle
+	const applyDifficultyLocally = (level) => {
+		const preset = DIFFICULTY_PRESETS[level] || DIFFICULTY_PRESETS.easy;
+		currentDifficulty = level in DIFFICULTY_PRESETS ? level : "easy";
+		rows = preset.rows;
+		cols = preset.cols;
+		diffButtons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.diff === currentDifficulty)));
+	};
+
 	// Confetti (simple)
 	const confetti = () => {
 		const particles = Array.from({ length: 140 }).map(() => ({
@@ -463,15 +472,17 @@
 			startMs = performance.now();
 			rAFTimer();
 		}
-		// Simulate win buttons
-		if (btnSimEasy) btnSimEasy.addEventListener("click", async () => {
-			setDifficulty("easy");
-			await waitForPuzzleReady();
+		// Simulate win buttons (instant, no waiting)
+		if (btnSimEasy) btnSimEasy.addEventListener("click", () => {
+			applyDifficultyLocally("easy");
+			computeCanvasSize();
+			createPieces();
 			forceWin({ updateBest: false });
 		});
-		if (btnSimHard) btnSimHard.addEventListener("click", async () => {
-			setDifficulty("hard");
-			await waitForPuzzleReady();
+		if (btnSimHard) btnSimHard.addEventListener("click", () => {
+			applyDifficultyLocally("hard");
+			computeCanvasSize();
+			createPieces();
 			forceWin({ updateBest: false });
 		});
 	};
