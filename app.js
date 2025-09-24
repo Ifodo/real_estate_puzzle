@@ -499,29 +499,13 @@
 			openModal();
 		});
 		if (btnSimHard) btnSimHard.addEventListener("click", () => {
-			console.log("Simulate Hard clicked");
 			closePromo();
-			applyDifficultyLocally("hard");
-			computeCanvasSize();
-			createPieces();
-			// Force show congratulations for hard mode
-			completed = true;
+			// Just show the modal directly
+			document.getElementById("modal-title").textContent = "Congratulations! Hard Mode Completed!";
+			document.getElementById("modal-desc").textContent = "You completed the IGetHouse Dream Home Puzzle on Hard difficulty!";
+			modal.hidden = false;
+			modal.focus();
 			confetti();
-			// Update modal title for hard mode
-			const modalTitle = document.getElementById("modal-title");
-			const modalDesc = document.getElementById("modal-desc");
-			if (modalTitle) modalTitle.textContent = "Congratulations! Hard Mode Completed!";
-			if (modalDesc) modalDesc.textContent = "You completed the IGetHouse Dream Home Puzzle on Hard difficulty!";
-			console.log("Opening modal for hard mode completion");
-			openModal();
-			// Force show modal if it's not showing
-			setTimeout(() => {
-				if (modal && modal.hidden) {
-					console.log("Modal still hidden, forcing show");
-					modal.hidden = false;
-					modal.style.display = 'grid';
-				}
-			}, 100);
 		});
 	};
 
