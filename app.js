@@ -43,6 +43,8 @@
 	const promo = document.getElementById("promo");
 	const btnPromoHard = document.getElementById("promo-go-hard");
 	const btnPromoStay = document.getElementById("promo-stay-easy");
+	const btnSimEasy = document.getElementById("simulate-easy");
+	const btnSimHard = document.getElementById("simulate-hard");
 
 	// State
 	let image = new Image();
@@ -316,6 +318,31 @@
 		}
 	};
 
+	// Simulate completion helpers
+	const lockAllPiecesInPlace = () => {
+		for (const p of pieces) {
+			p.x = p.correctX;
+			p.y = p.correctY;
+			p.locked = true;
+		}
+		draw();
+		updateProgress();
+	};
+
+	const forceWin = (options = { updateBest: false }) => {
+		completed = true;
+		cancelAnimationFrame(rafId);
+		lockAllPiecesInPlace();
+		if (options.updateBest) {
+			const elapsed = performance.now() - startMs;
+			const best = readBest();
+			if (!best || elapsed < best) writeBest(elapsed);
+			updateBestUI();
+		}
+		confetti();
+		openModal();
+	};
+
 	// Confetti (simple)
 	const confetti = () => {
 		const particles = Array.from({ length: 140 }).map(() => ({
@@ -425,6 +452,9 @@
 			startMs = performance.now();
 			rAFTimer();
 		}
+		// Simulate win buttons
+		if (btnSimEasy) btnSimEasy.addEventListener("click", async () => { setDifficulty("easy"); await new Promise(r => setTimeout(r, 50)); forceWin({ updateBest: false }); });
+		if (btnSimHard) btnSimHard.addEventListener("click", async () => { setDifficulty("hard"); await new Promise(r => setTimeout(r, 50)); forceWin({ updateBest: false }); });
 	};
 
 	const onPointerMove = (e) => {
