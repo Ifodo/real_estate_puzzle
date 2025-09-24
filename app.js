@@ -320,6 +320,10 @@
 
 	// Simulate completion helpers
 	const lockAllPiecesInPlace = () => {
+		if (!pieces || pieces.length === 0) {
+			console.warn("No pieces to lock in place");
+			return;
+		}
 		for (const p of pieces) {
 			p.x = p.correctX;
 			p.y = p.correctY;
@@ -330,6 +334,11 @@
 	};
 
 	const forceWin = (options = { updateBest: false }) => {
+		console.log("Forcing win with", pieces.length, "pieces, imageLoaded:", imageLoaded);
+		if (!imageLoaded) {
+			console.warn("Image not loaded, cannot force win yet");
+			return;
+		}
 		completed = true;
 		cancelAnimationFrame(rafId);
 		lockAllPiecesInPlace();
@@ -474,6 +483,7 @@
 		}
 		// Simulate win buttons (instant, no waiting)
 		if (btnSimEasy) btnSimEasy.addEventListener("click", () => {
+			console.log("Simulate Easy clicked");
 			closePromo();
 			applyDifficultyLocally("easy");
 			computeCanvasSize();
@@ -481,6 +491,7 @@
 			forceWin({ updateBest: false });
 		});
 		if (btnSimHard) btnSimHard.addEventListener("click", () => {
+			console.log("Simulate Hard clicked");
 			closePromo();
 			applyDifficultyLocally("hard");
 			computeCanvasSize();
