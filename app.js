@@ -40,6 +40,9 @@
 	const yearEl = document.getElementById("year");
 	const previewEl = document.getElementById("preview");
 	const btnPreview = document.getElementById("btn-preview");
+	const promo = document.getElementById("promo");
+	const btnPromoHard = document.getElementById("promo-go-hard");
+	const btnPromoStay = document.getElementById("promo-stay-easy");
 
 	// State
 	let image = new Image();
@@ -372,6 +375,10 @@
 		window.addEventListener("keydown", (e) => { if (!modal.hidden && e.key === "Escape") closeModal(); });
 	};
 
+	// Promo (Hard challenge)
+	const openPromo = () => { if (promo) { promo.hidden = false; try { promo.focus(); } catch (_) {} } };
+	const closePromo = () => { if (promo) promo.hidden = true; };
+
 	// Preview toggle
 	const setPreviewVisible = (v) => {
 		previewVisible = Boolean(v);
@@ -536,6 +543,22 @@
 					requestShowPreview();
 				}
 			});
+		}
+		// Show the promo once per session
+		try {
+			if (!sessionStorage.getItem("promo:shown")) {
+				openPromo();
+				sessionStorage.setItem("promo:shown", "1");
+			}
+		} catch (_) {
+			openPromo();
+		}
+		// Promo interactions
+		if (btnPromoHard) btnPromoHard.addEventListener("click", () => { closePromo(); setDifficulty("hard"); });
+		if (btnPromoStay) btnPromoStay.addEventListener("click", () => { closePromo(); });
+		if (promo) {
+			promo.addEventListener("click", (e) => { if (e.target === promo) closePromo(); });
+			window.addEventListener("keydown", (e) => { if (!promo.hidden && e.key === "Escape") closePromo(); });
 		}
 	};
 

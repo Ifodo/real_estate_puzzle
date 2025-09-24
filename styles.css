@@ -102,3 +102,44 @@ body {
 
 /* Accessibility helpers */
 .btn:focus { outline: 3px solid #93c5fd; outline-offset: 2px; } 
+
+/* Promo (Hard challenge) */
+.promo { position: fixed; inset: 0; display: grid; place-items: center; background: rgba(15, 23, 42, 0.55); z-index: 20; animation: promoOverlay 220ms ease-out; }
+.promo[hidden] { display: none; }
+.promo-card {
+	background: #ffffff;
+	width: min(92vw, 560px);
+	border-radius: 0.9rem;
+	padding: 1.25rem 1rem 1rem;
+	box-shadow: 0 18px 44px rgba(0,0,0,0.18);
+	border: 1px solid #e2e8f0;
+	text-align: center;
+	animation: promoIn 420ms cubic-bezier(.2,.7,.2,1) both;
+}
+.promo-badge {
+	display: inline-block;
+	background: var(--brand-50);
+	color: var(--brand-700);
+	border: 1px solid #bde4d4;
+	padding: 0.25rem 0.5rem;
+	border-radius: 999px;
+	font-weight: 700;
+	font-size: 0.8rem;
+	margin-bottom: 0.5rem;
+	animation: promoPulse 1.8s ease-in-out infinite;
+}
+.promo-actions { display: flex; gap: 0.5rem; justify-content: center; margin-top: 0.75rem; flex-wrap: wrap; }
+
+@keyframes promoOverlay {
+	from { opacity: 0; }
+	to { opacity: 1; }
+}
+@keyframes promoIn {
+	0% { opacity: 0; transform: translateY(16px) scale(.96); }
+	60% { opacity: 1; transform: translateY(-2px) scale(1.01); }
+	100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes promoPulse {
+	0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(2,89,64,0.0); }
+	50% { transform: scale(1.03); box-shadow: 0 0 0 6px rgba(2,89,64,0.10); }
+}
