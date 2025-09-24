@@ -512,7 +512,16 @@
 			const modalDesc = document.getElementById("modal-desc");
 			if (modalTitle) modalTitle.textContent = "Congratulations! Hard Mode Completed!";
 			if (modalDesc) modalDesc.textContent = "You completed the IGetHouse Dream Home Puzzle on Hard difficulty!";
+			console.log("Opening modal for hard mode completion");
 			openModal();
+			// Force show modal if it's not showing
+			setTimeout(() => {
+				if (modal && modal.hidden) {
+					console.log("Modal still hidden, forcing show");
+					modal.hidden = false;
+					modal.style.display = 'grid';
+				}
+			}, 100);
 		});
 	};
 
