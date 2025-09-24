@@ -481,34 +481,6 @@
 			startMs = performance.now();
 			rAFTimer();
 		}
-		// Simulate win buttons (instant, no waiting)
-		if (btnSimEasy) btnSimEasy.addEventListener("click", () => {
-			console.log("Simulate Easy clicked");
-			closePromo();
-			applyDifficultyLocally("easy");
-			computeCanvasSize();
-			createPieces();
-			// Force show congratulations for easy mode
-			completed = true;
-			confetti();
-			// Update modal title for easy mode
-			const modalTitle = document.getElementById("modal-title");
-			const modalDesc = document.getElementById("modal-desc");
-			if (modalTitle) modalTitle.textContent = "Congratulations! Easy Mode Completed!";
-			if (modalDesc) modalDesc.textContent = "You completed the IGetHouse Dream Home Puzzle on Easy difficulty!";
-			openModal();
-		});
-		if (btnSimHard) btnSimHard.addEventListener("click", () => {
-			closePromo();
-			// Update modal content
-			const modalTitle = document.getElementById("modal-title");
-			const modalDesc = document.getElementById("modal-desc");
-			modalTitle.textContent = "Congratulations! Hard Mode Completed!";
-			modalDesc.textContent = "You completed the IGetHouse Dream Home Puzzle on Hard difficulty!";
-			// Use the same openModal function that works for real wins
-			openModal();
-			confetti();
-		});
 	};
 
 	const onPointerMove = (e) => {
@@ -636,6 +608,28 @@
 		if (promo) {
 			promo.addEventListener("click", (e) => { if (e.target === promo) closePromo(); });
 			window.addEventListener("keydown", (e) => { if (!promo.hidden && e.key === "Escape") closePromo(); });
+		}
+		if (btnSimEasy) {
+			btnSimEasy.addEventListener("click", () => {
+				closePromo();
+				const modalTitle = document.getElementById("modal-title");
+				const modalDesc = document.getElementById("modal-desc");
+				modalTitle.textContent = "Congratulations! Easy Mode Completed!";
+				modalDesc.textContent = "You completed the IGetHouse Dream Home Puzzle on Easy difficulty!";
+				openModal();
+				confetti();
+			});
+		}
+		if (btnSimHard) {
+			btnSimHard.addEventListener("click", () => {
+				closePromo();
+				const modalTitle = document.getElementById("modal-title");
+				const modalDesc = document.getElementById("modal-desc");
+				modalTitle.textContent = "Congratulations! Hard Mode Completed!";
+				modalDesc.textContent = "You completed the IGetHouse Dream Home Puzzle on Hard difficulty!";
+				openModal();
+				confetti();
+			});
 		}
 	};
 
