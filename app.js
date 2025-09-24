@@ -488,7 +488,15 @@
 			applyDifficultyLocally("easy");
 			computeCanvasSize();
 			createPieces();
-			forceWin({ updateBest: false });
+			// Force show congratulations for easy mode
+			completed = true;
+			confetti();
+			// Update modal title for easy mode
+			const modalTitle = document.getElementById("modal-title");
+			const modalDesc = document.getElementById("modal-desc");
+			if (modalTitle) modalTitle.textContent = "Congratulations! Easy Mode Completed!";
+			if (modalDesc) modalDesc.textContent = "You completed the IGetHouse Dream Home Puzzle on Easy difficulty!";
+			openModal();
 		});
 		if (btnSimHard) btnSimHard.addEventListener("click", () => {
 			console.log("Simulate Hard clicked");
@@ -496,7 +504,15 @@
 			applyDifficultyLocally("hard");
 			computeCanvasSize();
 			createPieces();
-			forceWin({ updateBest: false });
+			// Force show congratulations for hard mode
+			completed = true;
+			confetti();
+			// Update modal title for hard mode
+			const modalTitle = document.getElementById("modal-title");
+			const modalDesc = document.getElementById("modal-desc");
+			if (modalTitle) modalTitle.textContent = "Congratulations! Hard Mode Completed!";
+			if (modalDesc) modalDesc.textContent = "You completed the IGetHouse Dream Home Puzzle on Hard difficulty!";
+			openModal();
 		});
 	};
 
