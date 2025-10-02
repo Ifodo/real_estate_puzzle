@@ -411,7 +411,7 @@
 	];
 
 	const AGENTS = [
-		{ name: "Bisola Salami", phone: "+234 916 522 6722" },
+		{ name: "Madam Boro", phone: "+234 916 522 6722" },
 		{ name: "Olayinka Okunola", phone: "+234 812 853 2038" }
 	];
 
