@@ -429,7 +429,7 @@
 			agentCard.className = 'agent-card';
 			agentCard.innerHTML = `
 				<p class="agent-info"><strong>${agent.name}</strong><br>${agent.phone}</p>
-				<a href="https://wa.me/${agent.phone.replace(/[^0-9]/g, '')}?text=Hi! I just won "${prize}" on the IGetHouse Puzzle Game. I'd like to claim my prize!" 
+				<a href="https://wa.me/${agent.phone.replace(/[^0-9]/g, '')}?text=Hi, ${agent.name}, I just won "${prize}" on the IGetHouse Puzzle Game. I'd like to claim my prize!" 
 				   class="btn btn-primary" 
 				   target="_blank" 
 				   rel="noopener" 
