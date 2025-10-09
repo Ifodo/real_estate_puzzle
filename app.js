@@ -417,6 +417,29 @@
 
 	const getRandomPrize = () => PRIZES[Math.floor(Math.random() * PRIZES.length)];
 	const getRandomAgent = () => AGENTS[Math.floor(Math.random() * AGENTS.length)];
+	
+	const populateAgents = (prize) => {
+		const agentsContainer = document.getElementById("agents-container");
+		if (!agentsContainer) return;
+		
+		agentsContainer.innerHTML = '';
+		
+		AGENTS.forEach((agent) => {
+			const agentCard = document.createElement('div');
+			agentCard.className = 'agent-card';
+			agentCard.innerHTML = `
+				<p class="agent-info"><strong>${agent.name}</strong><br>${agent.phone}</p>
+				<a href="https://wa.me/${agent.phone.replace(/[^0-9]/g, '')}?text=Hi! I just won "${prize}" on the IGetHouse Puzzle Game. I'd like to claim my prize!" 
+				   class="btn btn-primary" 
+				   target="_blank" 
+				   rel="noopener" 
+				   aria-label="Chat with ${agent.name} on WhatsApp">
+				   Chat with ${agent.name}
+				</a>
+			`;
+			agentsContainer.appendChild(agentCard);
+		});
+	};
 
 	// Modal & Share
 	const openModal = () => {
@@ -626,17 +649,30 @@
 			promo.addEventListener("click", (e) => { if (e.target === promo) closePromo(); });
 			window.addEventListener("keydown", (e) => { if (!promo.hidden && e.key === "Escape") closePromo(); });
 		}
-		if (btnSimEasy) {
-			btnSimEasy.addEventListener("click", () => {
-				closePromo();
-				const modalTitle = document.getElementById("modal-title");
-				const modalDesc = document.getElementById("modal-desc");
-				modalTitle.textContent = "Congratulations! Easy Mode Completed!";
-				modalDesc.textContent = "You completed the IGetHouse Dream Home Puzzle on Easy difficulty!";
-				openModal();
-				confetti();
-			});
-		}
+	if (btnSimEasy) {
+		btnSimEasy.addEventListener("click", () => {
+			closePromo();
+			const modalTitle = document.getElementById("modal-title");
+			const modalDesc = document.getElementById("modal-desc");
+			const prizeSection = document.getElementById("prize-section");
+			const normalSection = document.getElementById("normal-section");
+			const prizeName = document.getElementById("prize-name");
+			
+			modalTitle.textContent = "Congratulations! Easy Mode Completed!";
+			modalDesc.textContent = "You completed the IGetHouse Dream Home Puzzle on Easy difficulty!";
+			
+			// Show prize section for easy mode with both agents
+			const prize = getRandomPrize();
+			prizeName.textContent = prize;
+			populateAgents(prize);
+			
+			prizeSection.hidden = false;
+			normalSection.hidden = true;
+			
+			openModal();
+			confetti();
+		});
+	}
 	if (btnSimHard) {
 		btnSimHard.addEventListener("click", () => {
 			closePromo();
@@ -645,18 +681,14 @@
 			const prizeSection = document.getElementById("prize-section");
 			const normalSection = document.getElementById("normal-section");
 			const prizeName = document.getElementById("prize-name");
-			const agentInfo = document.getElementById("agent-info");
-			const whatsappLink = document.getElementById("whatsapp-link");
 			
 			modalTitle.textContent = "Congratulations! Hard Mode Completed!";
 			modalDesc.textContent = "You completed the IGetHouse Dream Home Puzzle on Hard difficulty!";
 			
-			// Show prize section for hard mode
+			// Show prize section for hard mode with both agents
 			const prize = getRandomPrize();
-			const agent = getRandomAgent();
 			prizeName.textContent = prize;
-			agentInfo.textContent = `${agent.name} - ${agent.phone}`;
-			whatsappLink.href = `https://wa.me/${agent.phone.replace(/[^0-9]/g, '')}?text=Hi! I just won "${prize}" on the IGetHouse Puzzle Game. I'd like to claim my prize!`;
+			populateAgents(prize);
 			
 			prizeSection.hidden = false;
 			normalSection.hidden = true;
