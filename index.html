@@ -17,30 +17,30 @@
 
   <main class="app-main" role="main">
     <section class="controls" aria-label="Puzzle controls">
-      <div class="control-group" role="group" aria-label="Difficulty">
+      <div class="control-group control-card control-difficulty" role="group" aria-label="Difficulty">
         <span class="control-label">Difficulty:</span>
         <button class="btn btn-diff" data-diff="easy" aria-label="Easy difficulty">Easy</button>
         <button class="btn btn-diff" data-diff="medium" aria-label="Medium difficulty">Medium</button>
         <button class="btn btn-diff" data-diff="hard" aria-label="Hard difficulty">Hard</button>
       </div>
-      <div class="control-group nav" role="group" aria-label="Navigate puzzles">
+      <div class="control-group control-card control-nav nav" role="group" aria-label="Navigate puzzles">
         <div class="nav-row">
           <button id="btn-prev" class="btn" aria-label="Previous puzzle">Prev</button>
           <button id="btn-next" class="btn" aria-label="Next puzzle">Next</button>
         </div>
         <span id="puzzle-title" class="property-title" aria-live="polite">Loading…</span>
       </div>
-      <div class="control-group" role="group" aria-label="Actions">
+      <div class="control-group control-card control-actions" role="group" aria-label="Actions">
         <button id="btn-new" class="btn" aria-label="New puzzle">New Puzzle</button>
         <button id="btn-shuffle" class="btn" aria-label="Shuffle pieces">Shuffle</button>
         <button id="btn-preview" class="btn" aria-label="Toggle preview" aria-pressed="false">Show Preview</button>
       </div>
-      <div class="status" aria-live="polite">
+      <div class="status control-card" aria-live="polite">
         <span id="timer" class="timer" aria-label="Elapsed time">00:00</span>
         <span id="best" class="best" aria-label="Best time">Best: --:--</span>
         <span id="progress" class="progress" aria-label="Progress">0%</span>
       </div>
-      <div class="quick-win" role="group" aria-label="Simulate win">
+      <div class="quick-win control-card" role="group" aria-label="Simulate win">
         <button id="simulate-easy" class="btn" aria-label="Simulate easy win">Simulate Easy Win</button>
         <button id="simulate-hard" class="btn" aria-label="Simulate hard win">Simulate Hard Win</button>
       </div>
