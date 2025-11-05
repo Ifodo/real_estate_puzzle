@@ -426,6 +426,16 @@
 
 	const getRandomPrize = () => PRIZES[Math.floor(Math.random() * PRIZES.length)];
 	const getRandomAgent = () => AGENTS[Math.floor(Math.random() * AGENTS.length)];
+
+	const openWhatsAppChat = (agent, prize) => {
+		const phoneDigits = agent.phone.replace(/[^0-9]/g, "");
+		const message = `Hi, ${agent.name}, I just won "${prize}" on the IGetHouse Puzzle Game. I'd like to claim my prize!`;
+		const url = `https://wa.me/${phoneDigits}?text=${encodeURIComponent(message)}`;
+		const popup = window.open(url, "_blank", "noopener");
+		if (!popup) {
+			window.location.href = url;
+		}
+	};
 	
 	const populateAgents = (prize) => {
 		if (!agentsContainer) return;
@@ -433,19 +443,17 @@
 		AGENTS.forEach((agent) => {
 			const agentCard = document.createElement("div");
 			agentCard.className = "agent-card";
-			const phoneDigits = agent.phone.replace(/[^0-9]/g, "");
-			const message = `Hi, ${agent.name}, I just won "${prize}" on the IGetHouse Puzzle Game. I'd like to claim my prize!`;
-			const encodedMessage = encodeURIComponent(message);
-			agentCard.innerHTML = `
-				<p class="agent-info"><strong>${agent.name}</strong><br>${agent.phone}</p>
-				<a href="https://wa.me/${phoneDigits}?text=${encodedMessage}"
-				   class="btn btn-primary"
-				   target="_blank"
-				   rel="noopener"
-				   aria-label="Chat with ${agent.name} on WhatsApp">
-				   Chat with ${agent.name}
-				</a>
-			`;
+			const info = document.createElement("p");
+			info.className = "agent-info";
+			info.innerHTML = `<strong>${agent.name}</strong><br>${agent.phone}`;
+			const chatBtn = document.createElement("button");
+			chatBtn.type = "button";
+			chatBtn.className = "btn btn-primary";
+			chatBtn.textContent = `Chat with ${agent.name}`;
+			chatBtn.setAttribute("aria-label", `Chat with ${agent.name} on WhatsApp`);
+			chatBtn.addEventListener("click", () => openWhatsAppChat(agent, prize));
+			agentCard.appendChild(info);
+			agentCard.appendChild(chatBtn);
 			agentsContainer.appendChild(agentCard);
 		});
 	};
