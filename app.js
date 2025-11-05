@@ -45,6 +45,15 @@
 	const btnPromoStay = document.getElementById("promo-stay-easy");
 	const btnSimEasy = document.getElementById("simulate-easy");
 	const btnSimHard = document.getElementById("simulate-hard");
+	const modalTitle = document.getElementById("modal-title");
+	const modalDesc = document.getElementById("modal-desc");
+	const prizeSection = document.getElementById("prize-section");
+	const normalSection = document.getElementById("normal-section");
+	const prizeNameEl = document.getElementById("prize-name");
+	const agentsContainer = document.getElementById("agents-container");
+	const DEFAULT_MODAL_TITLE = modalTitle ? modalTitle.textContent : "";
+	const DEFAULT_MODAL_DESC = modalDesc ? modalDesc.textContent : "";
+	const HARD_PRIZE_THRESHOLD_MS = 5 * 60 * 1000;
 
 	// State
 	let image = new Image();
@@ -251,11 +260,11 @@
 			}
 			draw();
 			confetti();
-			const elapsed = performance.now() - startMs;
+			const elapsed = startMs ? Math.max(0, performance.now() - startMs) : 0;
 			const best = readBest();
-			if (!best || elapsed < best) writeBest(elapsed);
+			if (!best || (elapsed > 0 && elapsed < best)) writeBest(elapsed);
 			updateBestUI();
-			openModal();
+			handleWinModal(elapsed);
 		}
 	};
 
@@ -342,14 +351,14 @@
 		completed = true;
 		cancelAnimationFrame(rafId);
 		lockAllPiecesInPlace();
+		const elapsed = startMs ? Math.max(0, performance.now() - startMs) : 0;
 		if (options.updateBest) {
-			const elapsed = performance.now() - startMs;
 			const best = readBest();
-			if (!best || elapsed < best) writeBest(elapsed);
+			if (!best || (elapsed > 0 && elapsed < best)) writeBest(elapsed);
 			updateBestUI();
 		}
 		confetti();
-		openModal();
+		handleWinModal(elapsed);
 	};
 
 	// Wait until image is loaded and pieces are created
@@ -419,26 +428,69 @@
 	const getRandomAgent = () => AGENTS[Math.floor(Math.random() * AGENTS.length)];
 	
 	const populateAgents = (prize) => {
-		const agentsContainer = document.getElementById("agents-container");
 		if (!agentsContainer) return;
-		
-		agentsContainer.innerHTML = '';
-		
+		agentsContainer.innerHTML = "";
 		AGENTS.forEach((agent) => {
-			const agentCard = document.createElement('div');
-			agentCard.className = 'agent-card';
+			const agentCard = document.createElement("div");
+			agentCard.className = "agent-card";
+			const phoneDigits = agent.phone.replace(/[^0-9]/g, "");
+			const message = `Hi, ${agent.name}, I just won "${prize}" on the IGetHouse Puzzle Game. I'd like to claim my prize!`;
+			const encodedMessage = encodeURIComponent(message);
 			agentCard.innerHTML = `
 				<p class="agent-info"><strong>${agent.name}</strong><br>${agent.phone}</p>
-				<a href="https://wa.me/${agent.phone.replace(/[^0-9]/g, '')}?text=Hi, ${agent.name}, I just won "${prize}" on the IGetHouse Puzzle Game. I'd like to claim my prize!" 
-				   class="btn btn-primary" 
-				   target="_blank" 
-				   rel="noopener" 
+				<a href="https://wa.me/${phoneDigits}?text=${encodedMessage}"
+				   class="btn btn-primary"
+				   target="_blank"
+				   rel="noopener"
 				   aria-label="Chat with ${agent.name} on WhatsApp">
 				   Chat with ${agent.name}
 				</a>
 			`;
 			agentsContainer.appendChild(agentCard);
 		});
+	};
+
+	const clearAgents = () => { if (agentsContainer) agentsContainer.innerHTML = ""; };
+
+	const toTitleCase = (value = "") => (value ? value.charAt(0).toUpperCase() + value.slice(1) : "");
+
+	const shouldAwardPrize = (elapsedMs) => currentDifficulty === "hard" && elapsedMs > 0 && elapsedMs <= HARD_PRIZE_THRESHOLD_MS;
+
+	const showPrizeOutcome = (difficultyLabel, elapsedMs) => {
+		const prize = getRandomPrize();
+		if (modalTitle) modalTitle.textContent = `Congratulations! ${difficultyLabel} Mode Completed!`;
+		if (modalDesc) {
+			const timeSuffix = elapsedMs > 0 ? ` in ${formatTime(elapsedMs)}` : "";
+			modalDesc.textContent = `You completed the IGetHouse Dream Home Puzzle on ${difficultyLabel} difficulty${timeSuffix}.`;
+		}
+		if (prizeNameEl) prizeNameEl.textContent = prize;
+		if (prizeSection) prizeSection.hidden = false;
+		if (normalSection) normalSection.hidden = true;
+		populateAgents(prize);
+	};
+
+	const showStandardOutcome = (difficultyLabel, elapsedMs) => {
+		if (modalTitle) modalTitle.textContent = DEFAULT_MODAL_TITLE || `Congratulations!`;
+		if (modalDesc) {
+			modalDesc.textContent = DEFAULT_MODAL_DESC || `You completed the IGetHouse Dream Home Puzzle on ${difficultyLabel} difficulty${elapsedMs ? ` in ${formatTime(elapsedMs)}.` : "."}`;
+		}
+		if (prizeSection) prizeSection.hidden = true;
+		if (normalSection) normalSection.hidden = false;
+		if (prizeNameEl) prizeNameEl.textContent = "";
+		clearAgents();
+	};
+
+	const handleWinModal = (elapsedMs) => {
+		const difficultyLabel = toTitleCase(currentDifficulty);
+		if (shouldAwardPrize(elapsedMs)) {
+			showPrizeOutcome(difficultyLabel, elapsedMs);
+		} else {
+			showStandardOutcome(difficultyLabel, elapsedMs);
+		}
+		if (modal) {
+			modal.hidden = false;
+			try { modal.focus(); } catch (_) {}
+		}
 	};
 
 	// Modal & Share
