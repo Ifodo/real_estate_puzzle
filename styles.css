@@ -27,8 +27,6 @@ body {
 .app-logo { height: 40px; width: auto; vertical-align: middle; margin-bottom: 0.25rem; }
 .app-title { margin: 0; font-size: 1.5rem; font-weight: 700; color: var(--brand-700); }
 .app-subtitle { margin: 0.25rem 0 0; color: #475569; }
-.quick-win { display: flex; gap: 0.5rem; justify-content: flex-start; flex-wrap: wrap; margin-top: 0.5rem; position: relative; z-index: 30; }
-
 .app-main { max-width: 1100px; margin: 0 auto; padding: 1rem; }
 
 .controls {
@@ -137,8 +135,7 @@ body {
 	.control-actions {
 		grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
 	}
-	.control-group .btn,
-	.quick-win .btn {
+	.control-group .btn {
 		width: 100%;
 		justify-content: center;
 	}
@@ -153,11 +150,6 @@ body {
 		border-radius: 0.5rem;
 		background: var(--brand-50);
 	}
-	.quick-win {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-		gap: 0.5rem;
-	}
 	.board {
 		padding: 0.5rem;
 	}
@@ -171,8 +163,7 @@ body {
 		gap: 0.75rem;
 	}
 	.control-difficulty,
-	.control-actions,
-	.quick-win {
+	.control-actions {
 		grid-template-columns: 1fr;
 	}
 	.control-group.nav .nav-row {

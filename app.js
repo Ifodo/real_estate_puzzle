@@ -44,8 +44,6 @@
 	const promo = document.getElementById("promo");
 	const btnPromoHard = document.getElementById("promo-go-hard");
 	const btnPromoStay = document.getElementById("promo-stay-easy");
-	const btnSimEasy = document.getElementById("simulate-easy");
-	const btnSimHard = document.getElementById("simulate-hard");
 	const modalTitle = document.getElementById("modal-title");
 	const modalDesc = document.getElementById("modal-desc");
 	const prizeSection = document.getElementById("prize-section");
@@ -767,54 +765,6 @@
 			promo.addEventListener("click", (e) => { if (e.target === promo) closePromo(); });
 			window.addEventListener("keydown", (e) => { if (!promo.hidden && e.key === "Escape") closePromo(); });
 		}
-	if (btnSimEasy) {
-		btnSimEasy.addEventListener("click", () => {
-			closePromo();
-			const modalTitle = document.getElementById("modal-title");
-			const modalDesc = document.getElementById("modal-desc");
-			const prizeSection = document.getElementById("prize-section");
-			const normalSection = document.getElementById("normal-section");
-			const prizeName = document.getElementById("prize-name");
-			
-			modalTitle.textContent = "Congratulations! Easy Mode Completed!";
-			modalDesc.textContent = "You completed the IGetHouse Dream Home Puzzle on Easy difficulty!";
-			
-			// Show prize section for easy mode with both agents
-			const prize = getRandomPrize();
-			prizeName.textContent = prize;
-			populateAgents(prize);
-			
-			prizeSection.hidden = false;
-			normalSection.hidden = true;
-			
-			openModal();
-			confetti();
-		});
-	}
-	if (btnSimHard) {
-		btnSimHard.addEventListener("click", () => {
-			closePromo();
-			const modalTitle = document.getElementById("modal-title");
-			const modalDesc = document.getElementById("modal-desc");
-			const prizeSection = document.getElementById("prize-section");
-			const normalSection = document.getElementById("normal-section");
-			const prizeName = document.getElementById("prize-name");
-			
-			modalTitle.textContent = "Congratulations! Hard Mode Completed!";
-			modalDesc.textContent = "You completed the IGetHouse Dream Home Puzzle on Hard difficulty!";
-			
-			// Show prize section for hard mode with both agents
-			const prize = getRandomPrize();
-			prizeName.textContent = prize;
-			populateAgents(prize);
-			
-			prizeSection.hidden = false;
-			normalSection.hidden = true;
-			
-			openModal();
-			confetti();
-		});
-	}
 	};
 
 	if (document.readyState === "loading") {
