@@ -11,7 +11,8 @@
 		medium: { rows: 4, cols: 5 },
 		hard: { rows: 6, cols: 7 }
 	};
-	const SNAP_TOLERANCE_PX = 18;
+	const isCoarsePointerDevice = typeof window !== "undefined" && window.matchMedia ? window.matchMedia("(pointer: coarse)").matches : false;
+	const SNAP_TOLERANCE_PX = isCoarsePointerDevice ? 24 : 18;
 	let CTA_URL = "https://www.igethouse.ng/"; // default, overridden by inline JSON if available
 	const DEFAULT_IMAGE = "https://images.unsplash.com/photo-1502005229762-cf1b2da7c52f?q=70&w=1200&auto=format&fit=crop";
 
@@ -65,6 +66,7 @@
 	let pieceWidth = 0;
 	let pieceHeight = 0;
 	let dragState = { activeId: null, offsetX: 0, offsetY: 0 };
+	let activePointerId = null;
 	let started = false;
 	let startMs = 0;
 	let rafId = 0;
@@ -77,6 +79,34 @@
 	const PREVIEW_AUTO_HIDE_MS = 10000;
 	const PREVIEW_MAX_VIEWS = 2;
 	let previewTimerId = 0;
+	const supportsPassiveEvents = (() => {
+		if (typeof window === "undefined") return false;
+		let passive = false;
+		try {
+			const opts = Object.defineProperty({}, "passive", {
+				get() {
+					passive = true;
+					return false;
+				}
+			});
+			window.addEventListener("_passive_test", () => {}, opts);
+			window.removeEventListener("_passive_test", () => {}, opts);
+		} catch (_) {}
+		return passive;
+	})();
+	const addNonPassiveListener = (target, type, handler) => {
+		if (!target || !target.addEventListener) return;
+		const opts = supportsPassiveEvents ? { passive: false } : false;
+		target.addEventListener(type, handler, opts);
+	};
+	const setPointerCaptureSafe = (target, id) => {
+		if (!target || !target.setPointerCapture) return;
+		try { target.setPointerCapture(id); } catch (_) {}
+	};
+	const releasePointerCaptureSafe = (target, id) => {
+		if (!target || !target.releasePointerCapture) return;
+		try { target.releasePointerCapture(id); } catch (_) {}
+	};
 
 	// Exact completion tolerance (in pixels)
 	const EXACT_SNAP_TOLERANCE_PX = 2;
@@ -563,7 +593,11 @@
 
 	// Event Handlers
 	const onPointerDown = (e) => {
-		if (completed) return;
+		if (completed) {
+			if (e && typeof e.preventDefault === "function") e.preventDefault();
+			return;
+		}
+		if (e && typeof e.preventDefault === "function") e.preventDefault();
 		const rect = canvas.getBoundingClientRect();
 		const x = (e.clientX - rect.left) * (canvas.width / rect.width);
 		const y = (e.clientY - rect.top) * (canvas.height / rect.height);
@@ -575,7 +609,8 @@
 		dragState.activeId = p.id;
 		dragState.offsetX = x - p.x;
 		dragState.offsetY = y - p.y;
-		e.currentTarget.setPointerCapture(e.pointerId);
+		activePointerId = e.pointerId;
+		setPointerCaptureSafe(canvas, e.pointerId);
 		if (!started) {
 			started = true;
 			startMs = performance.now();
@@ -585,6 +620,7 @@
 
 	const onPointerMove = (e) => {
 		if (dragState.activeId == null) return;
+		if (e && typeof e.preventDefault === "function") e.preventDefault();
 		const rect = canvas.getBoundingClientRect();
 		const x = (e.clientX - rect.left) * (canvas.width / rect.width);
 		const y = (e.clientY - rect.top) * (canvas.height / rect.height);
@@ -601,6 +637,11 @@
 
 	const onPointerUp = (e) => {
 		if (dragState.activeId == null) return;
+		if (e && typeof e.preventDefault === "function") e.preventDefault();
+		if (activePointerId != null) {
+			releasePointerCaptureSafe(canvas, activePointerId);
+			activePointerId = null;
+		}
 		const p = pieces.find((pp) => pp.id === dragState.activeId);
 		dragState.activeId = null;
 		if (!p) return;
@@ -609,6 +650,19 @@
 		clearHighlights();
 		draw();
 		checkCompletion();
+	};
+
+	const onPointerCancel = (e) => {
+		if (dragState.activeId == null) return;
+		if (e && typeof e.preventDefault === "function") e.preventDefault();
+		if (activePointerId != null) {
+			releasePointerCaptureSafe(canvas, activePointerId);
+			activePointerId = null;
+		}
+		dragState.activeId = null;
+		clearHighlights();
+		draw();
+		updateProgress();
 	};
 
 	// Puzzles & Config (inline JSON)
@@ -681,9 +735,13 @@
 		currentPuzzleIndex = getWeekIndex();
 		await loadCurrentPuzzle();
 		window.addEventListener("resize", () => { computeCanvasSize(); createPieces(); draw(); });
-		canvas.addEventListener("pointerdown", onPointerDown);
-		canvas.addEventListener("pointermove", onPointerMove);
-		canvas.addEventListener("pointerup", onPointerUp);
+		addNonPassiveListener(canvas, "pointerdown", onPointerDown);
+		addNonPassiveListener(canvas, "pointermove", onPointerMove);
+		addNonPassiveListener(canvas, "pointerup", onPointerUp);
+		addNonPassiveListener(canvas, "pointercancel", onPointerCancel);
+		addNonPassiveListener(canvas, "pointerleave", onPointerCancel);
+		addNonPassiveListener(window, "pointerup", onPointerUp);
+		addNonPassiveListener(window, "pointercancel", onPointerCancel);
 		btnNew.addEventListener("click", () => loadCurrentPuzzle());
 		btnShuffle.addEventListener("click", shufflePieces);
 		diffButtons.forEach((b) => b.addEventListener("click", () => setDifficulty(b.dataset.diff)));
